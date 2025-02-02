@@ -6,6 +6,7 @@ import { v2 as cloudinary } from "cloudinary";
 
 import myUserRoute from "./routes/MyUser.routes";
 import myRestaurantRoute from "./routes/MyRestaurant.routes";
+import restaurantRoute from "./routes/Restaurant.routes";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -24,6 +25,7 @@ app.get("/health", async (req: Request, res: Response) => {
 
 app.use("/api/my/user", myUserRoute);
 app.use("/api/my/restaurant", myRestaurantRoute);
+app.use("/api/restaurant", restaurantRoute);
 
 app.listen(7000, () => {
   console.log("Server started on localhost:7000");

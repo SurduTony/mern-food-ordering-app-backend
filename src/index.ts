@@ -7,6 +7,7 @@ import { v2 as cloudinary } from "cloudinary";
 import myUserRoute from "./routes/MyUser.routes";
 import myRestaurantRoute from "./routes/MyRestaurant.routes";
 import restaurantRoute from "./routes/Restaurant.routes";
+import orderRoute from "./routes/Order.routes";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -16,8 +17,12 @@ cloudinary.config({
 
 const app = express();
 
-app.use(express.json());
 app.use(cors());
+
+// keeps the request raw (not converted to json) so that stripe can verify it
+app.use("/api/order/checkout/webhook", express.raw({ type: "*/*" }));
+
+app.use(express.json());
 
 app.get("/health", async (req: Request, res: Response) => {
   res.send({ message: "health OK!" });
@@ -26,6 +31,7 @@ app.get("/health", async (req: Request, res: Response) => {
 app.use("/api/my/user", myUserRoute);
 app.use("/api/my/restaurant", myRestaurantRoute);
 app.use("/api/restaurant", restaurantRoute);
+app.use("/api/order", orderRoute);
 
 app.listen(7000, () => {
   console.log("Server started on localhost:7000");
